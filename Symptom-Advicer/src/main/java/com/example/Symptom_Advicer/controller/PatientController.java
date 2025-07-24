@@ -1,8 +1,10 @@
 package com.example.Symptom_Advicer.controller;
 
 import com.example.Symptom_Advicer.model.Patient;
+import com.example.Symptom_Advicer.model.PatientDto;
 import com.example.Symptom_Advicer.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,39 +13,47 @@ import java.util.List;
 @RestController
 public class PatientController {
     @Autowired
-    PatientService hws;
+    private PatientService patientService;
 
-    @GetMapping
-    public List<Patient> getMethod(){
-        return hws.getMethod();
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @GetMapping("/")
+    public String welcome() {
+        return "Welcome to Symptom Advicer!";
     }
 
-    @GetMapping("/{std_id}")
-    public Patient getMethodById(@PathVariable int std_id){
-        return hws.getMethodById(std_id);
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @GetMapping("/patients")
+    public List<Patient> getAllPatients() {
+        return patientService.getAllPatients();
     }
 
-
-    @PostMapping
-    public String postMethod(@RequestBody Patient s){
-        return hws.postMethod(s);
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @GetMapping("/patients/{id}")
+    public Patient getPatientById(@PathVariable Long id) {
+        return patientService.getPatientById(id);
     }
 
-
-    @PutMapping
-    public String putMethod(@RequestBody Patient s1){
-        return hws.updateMethod(s1);
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @GetMapping("/patients/email/{email}")
+    public Patient getPatientByEmail(@PathVariable String email) {
+        return patientService.getPatientByEmail(email);
     }
 
-
-
-    @DeleteMapping
-    public String deleteMethod(){
-        return hws.deleteMethod();
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/patients")
+    public String addPatient(@RequestBody PatientDto patientDto) {
+        return patientService.addPatient(patientDto);
     }
 
-    @DeleteMapping("/{std_id}")
-    public String deleteMethodById(@PathVariable int std_id){
-        return hws.deleteMethodById(std_id);
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/patients/{id}")
+    public String updatePatient(@PathVariable Long id, @RequestBody PatientDto patientDto) {
+        return patientService.updatePatient(id, patientDto);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/patients/{id}")
+    public String deletePatient(@PathVariable Long id) {
+        return patientService.deletePatient(id);
     }
 }

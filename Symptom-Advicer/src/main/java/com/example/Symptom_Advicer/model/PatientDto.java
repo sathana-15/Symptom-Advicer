@@ -1,43 +1,32 @@
 package com.example.Symptom_Advicer.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-@NoArgsConstructor // ✅ adds default constructor
-//@AllArgsConstructor
-@Data
-@Table("patients")
-@ToString
-// Name of the table in your MySQL database
-public class Patient {
 
-    @Id
-    private Long id;              // Primary Key (auto-increment in DB)
+@Data
+
+public class PatientDto {
     private String username;
     private String email;
     private String password;
-
-    private String roles;
-
-    //private String roles;
-
+    private String role;
     private String fullName;
     private String gender;
     private int age;
     private String phone;
     private String address;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public PatientDto(String username, String email, String password, String role, String fullName, String gender, int age, String phone, String address) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.fullName = fullName;
+        this.gender = gender;
+        this.age = age;
+        this.phone = phone;
+        this.address = address;
     }
 
     public String getUsername() {
@@ -64,12 +53,12 @@ public class Patient {
         this.password = password;
     }
 
-    public String getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(String roles) {
-        this.roles = roles;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getFullName() {
@@ -109,19 +98,6 @@ public class Patient {
     }
 
     public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Patient(Long id, String username, String email, String password, String roles, String fullName, String gender, int age, String phone, String address) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-        this.fullName = fullName;
-        this.gender = gender;
-        this.age = age;
-        this.phone = phone;
         this.address = address;
     }
 }

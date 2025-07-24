@@ -1,0 +1,167 @@
+package com.example.Symptom_Advicer.service;
+
+import com.example.Symptom_Advicer.jwt.JwtTokenProvider;
+import com.example.Symptom_Advicer.model.*;
+import com.example.Symptom_Advicer.repository.PatientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class AuthService {
+
+    @Autowired
+    private PatientRepository patientRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
+    // ✅ Register new patient
+    public String registerUser(RegisterRequest request) {
+        try {
+            System.out.println("Received registration request: " + request);
+
+            if (patientRepository.countByEmail(request.getEmail()) > 0) {
+                return "Email already registered!";
+            }
+
+            Patient patient = new Patient();
+            patient.setUsername(request.getUsername());
+            patient.setEmail(request.getEmail());
+
+            // ✅ BCrypt encode the password properly
+            patient.setPassword(passwordEncoder.encode(request.getPassword()));
+
+            patient.setRoles(request.getRoles());
+            patient.setFullName(request.getFullName());
+            patient.setGender(request.getGender());
+            patient.setAge(request.getAge());
+            patient.setPhone(request.getPhone());
+            patient.setAddress(request.getAddress());
+
+            patientRepository.save(patient);
+            return "User registered successfully!";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Internal error: " + e.getMessage();
+        }
+    }
+
+
+    // ✅ Authenticate user and generate JWT token
+    public JwtResponse authenticateUser(LoginRequest loginRequest) {
+        System.out.println("🔐 Login Email: " + loginRequest.getEmail());
+        System.out.println("🔐 Login Password: " + loginRequest.getPassword());
+
+        // Authenticate using Spring Security
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        // Debugging authentication details
+        System.out.println("✅ Authentication: " + authentication);
+        System.out.println("🔍 Principal: " + authentication.getPrincipal());
+        System.out.println("🔐 Authorities: " + authentication.getAuthorities());
+
+        // Fetch patient from DB
+        Patient patient = patientRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException("Patient not found!"));
+
+        // Generate JWT token
+        String token = jwtTokenProvider.generateToken(authentication);
+
+        System.out.println("✅ Token generated: " + token);
+        System.out.println("📛 Username: " + patient.getUsername());
+        System.out.println("📧 Email: " + patient.getEmail());
+        System.out.println("🎭 Role: " + patient.getRoles());
+
+        return new JwtResponse(
+                token,
+                patient.getUsername(),
+                patient.getEmail(),
+                patient.getRoles()
+        );
+    }
+
+    // ✅ Get all patients
+    public List<Patient> getAllPatients() {
+        return (List<Patient>) patientRepository.findAll();
+    }
+
+    // ✅ Get patient by ID
+    public Patient getPatientById(Long id) {
+        return patientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Patient not found with ID: " + id));
+    }
+
+    // ✅ Get patient by email
+    public Patient getPatientByEmail(String email) {
+        return patientRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Patient not found with email: " + email));
+    }
+
+    // ✅ Add new patient via DTO
+    public String addPatient(PatientDto dto) {
+        if (patientRepository.countByEmail(dto.getEmail()) > 0) {
+            return "Email already registered!";
+        }
+
+        Patient patient = new Patient();
+        mapDtoToEntity(dto, patient);
+        patient.setPassword(passwordEncoder.encode(dto.getPassword()));
+        patientRepository.save(patient);
+        return "Patient added successfully!";
+    }
+
+    // ✅ Update patient using DTO
+    public String updatePatient(Long id, PatientDto dto) {
+        Optional<Patient> optionalPatient = patientRepository.findById(id);
+
+        if (optionalPatient.isEmpty()) {
+            return "Patient not found!";
+        }
+
+        Patient patient = optionalPatient.get();
+        mapDtoToEntity(dto, patient);
+        patient.setId(id);
+        patient.setPassword(passwordEncoder.encode(dto.getPassword()));
+        patientRepository.save(patient);
+        return "Patient updated successfully!";
+    }
+
+    // ✅ Delete patient by ID
+    public String deletePatient(Long id) {
+        if (!patientRepository.existsById(id)) {
+            return "Patient not found!";
+        }
+        patientRepository.deleteById(id);
+        return "Patient deleted successfully!";
+    }
+
+    // ✅ Utility: Map DTO to Entity
+    private void mapDtoToEntity(PatientDto dto, Patient patient) {
+        patient.setUsername(dto.getUsername());
+        patient.setEmail(dto.getEmail());
+        patient.setRoles(dto.getRole());
+        patient.setFullName(dto.getFullName());
+        patient.setGender(dto.getGender());
+        patient.setAge(dto.getAge());
+        patient.setPhone(dto.getPhone());
+        patient.setAddress(dto.getAddress());
+    }
+}
