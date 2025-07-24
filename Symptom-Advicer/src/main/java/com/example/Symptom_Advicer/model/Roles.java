@@ -9,11 +9,11 @@ import org.springframework.data.relational.core.mapping.Table;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "roles") // ✅ Correct JDBC table mapping
+@Table(name = "roles")
 public class Roles {
 
-    @Id // ✅ Correct for Spring Data JDBC
+    @Id
     private Long roleId;
 
-    private String roleName; // No @Column — JDBC maps fields directly
+    private String roleName;
 }

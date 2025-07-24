@@ -16,14 +16,14 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    // Register a new user (patient/admin)
+
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody RegisterRequest registerRequest) {
         String message = authService.registerUser(registerRequest);
         return ResponseEntity.ok(message);
     }
 
-    // Login and get JWT token
+
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest loginRequest) {
         JwtResponse jwtResponse = authService.authenticateUser(loginRequest);

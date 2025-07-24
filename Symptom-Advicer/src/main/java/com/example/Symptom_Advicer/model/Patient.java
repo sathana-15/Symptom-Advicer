@@ -8,16 +8,16 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-@NoArgsConstructor // ✅ adds default constructor
+@NoArgsConstructor
 //@AllArgsConstructor
 @Data
 @Table("patients")
 @ToString
-// Name of the table in your MySQL database
+
 public class Patient {
 
     @Id
-    private Long id;              // Primary Key (auto-increment in DB)
+    private Long id;
     private String username;
     private String email;
     private String password;

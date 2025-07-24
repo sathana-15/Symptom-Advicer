@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface PatientRepository extends CrudRepository<Patient, Long> {
 
-    Optional<Patient> findByEmail(String email);   // Spring will auto-generate SQL
+    Optional<Patient> findByEmail(String email);
 
-    int countByEmail(String email);                // Works without @Query if method name matches
+    int countByEmail(String email);
 }

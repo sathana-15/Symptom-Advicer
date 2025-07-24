@@ -34,14 +34,14 @@ public class SpringController {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    // ✅ Password encoder bean
+
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // No Delegating
+        return new BCryptPasswordEncoder();
     }
 
 
-    // ✅ Authentication provider bean (uses our custom user service + password encoder)
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -50,25 +50,25 @@ public class SpringController {
         return provider;
     }
 
-    // ✅ AuthenticationManager bean (needed for login endpoint)
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    // ✅ Main security filter chain
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/auth/**").permitAll();         // public login/register
-                    auth.requestMatchers("/error").permitAll();               // allow Spring error pages
+                    auth.requestMatchers("/api/auth/**").permitAll();
+                    auth.requestMatchers("/error").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/patient/**").hasAnyRole("USER", "ADMIN");
                     auth.requestMatchers(HttpMethod.GET, "/symptom/**").hasAnyRole("USER", "ADMIN");
                     auth.requestMatchers(HttpMethod.POST, "/advice/**").hasRole("ADMIN");
-                    auth.anyRequest().authenticated();                        // all else needs auth
+                    auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -79,7 +79,7 @@ public class SpringController {
         return http.build();
     }
 
-    // ✅ CORS config (for React frontend on localhost)
+    //
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();

@@ -22,16 +22,17 @@ public class CustomerUserDetailsService implements UserDetailsService {
     private PatientRepository patientRepository;
 
     @Override
+
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Patient patient = patientRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
         List<GrantedAuthority> authorities = Arrays.stream(patient.getRoles().split(","))
                 .map(String::trim)
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
         return new User(patient.getEmail(), patient.getPassword(), authorities);
     }
+
 }

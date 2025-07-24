@@ -10,18 +10,18 @@ public class PatientDto {
     private String username;
     private String email;
     private String password;
-    private String role;
+    private String roles;
     private String fullName;
     private String gender;
     private int age;
     private String phone;
     private String address;
 
-    public PatientDto(String username, String email, String password, String role, String fullName, String gender, int age, String phone, String address) {
+    public PatientDto(String username, String email, String password, String roles, String fullName, String gender, int age, String phone, String address) {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.roles = roles;
         this.fullName = fullName;
         this.gender = gender;
         this.age = age;
@@ -53,12 +53,12 @@ public class PatientDto {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public String getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 
     public String getFullName() {

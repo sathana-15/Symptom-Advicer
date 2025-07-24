@@ -28,7 +28,7 @@ public class AuthService {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    // ✅ Register new patient
+
     public String registerUser(RegisterRequest request) {
         try {
             System.out.println("Received registration request: " + request);
@@ -41,7 +41,7 @@ public class AuthService {
             patient.setUsername(request.getUsername());
             patient.setEmail(request.getEmail());
 
-            // ✅ BCrypt encode the password properly
+
             patient.setPassword(passwordEncoder.encode(request.getPassword()));
 
             patient.setRoles(request.getRoles());
@@ -60,12 +60,12 @@ public class AuthService {
     }
 
 
-    // ✅ Authenticate user and generate JWT token
-    public JwtResponse authenticateUser(LoginRequest loginRequest) {
-        System.out.println("🔐 Login Email: " + loginRequest.getEmail());
-        System.out.println("🔐 Login Password: " + loginRequest.getPassword());
 
-        // Authenticate using Spring Security
+    public JwtResponse authenticateUser(LoginRequest loginRequest) {
+        System.out.println(" Login Email: " + loginRequest.getEmail());
+        System.out.println("Login Password: " + loginRequest.getPassword());
+
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
@@ -73,22 +73,22 @@ public class AuthService {
                 )
         );
 
-        // Debugging authentication details
-        System.out.println("✅ Authentication: " + authentication);
-        System.out.println("🔍 Principal: " + authentication.getPrincipal());
-        System.out.println("🔐 Authorities: " + authentication.getAuthorities());
 
-        // Fetch patient from DB
+        System.out.println("Authentication: " + authentication);
+        System.out.println("Principal: " + authentication.getPrincipal());
+        System.out.println("Authorities: " + authentication.getAuthorities());
+
+
         Patient patient = patientRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("Patient not found!"));
 
-        // Generate JWT token
+
         String token = jwtTokenProvider.generateToken(authentication);
 
-        System.out.println("✅ Token generated: " + token);
-        System.out.println("📛 Username: " + patient.getUsername());
-        System.out.println("📧 Email: " + patient.getEmail());
-        System.out.println("🎭 Role: " + patient.getRoles());
+        System.out.println("Token generated: " + token);
+        System.out.println("Username: " + patient.getUsername());
+        System.out.println("Email: " + patient.getEmail());
+        System.out.println("Role: " + patient.getRoles());
 
         return new JwtResponse(
                 token,
@@ -98,24 +98,24 @@ public class AuthService {
         );
     }
 
-    // ✅ Get all patients
+
     public List<Patient> getAllPatients() {
         return (List<Patient>) patientRepository.findAll();
     }
 
-    // ✅ Get patient by ID
+
     public Patient getPatientById(Long id) {
         return patientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with ID: " + id));
     }
 
-    // ✅ Get patient by email
+
     public Patient getPatientByEmail(String email) {
         return patientRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Patient not found with email: " + email));
     }
 
-    // ✅ Add new patient via DTO
+
     public String addPatient(PatientDto dto) {
         if (patientRepository.countByEmail(dto.getEmail()) > 0) {
             return "Email already registered!";
@@ -123,12 +123,16 @@ public class AuthService {
 
         Patient patient = new Patient();
         mapDtoToEntity(dto, patient);
+
+
         patient.setPassword(passwordEncoder.encode(dto.getPassword()));
+
         patientRepository.save(patient);
         return "Patient added successfully!";
     }
 
-    // ✅ Update patient using DTO
+
+
     public String updatePatient(Long id, PatientDto dto) {
         Optional<Patient> optionalPatient = patientRepository.findById(id);
 
@@ -139,12 +143,18 @@ public class AuthService {
         Patient patient = optionalPatient.get();
         mapDtoToEntity(dto, patient);
         patient.setId(id);
-        patient.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            patient.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
         patientRepository.save(patient);
         return "Patient updated successfully!";
     }
 
-    // ✅ Delete patient by ID
+
+
     public String deletePatient(Long id) {
         if (!patientRepository.existsById(id)) {
             return "Patient not found!";
@@ -153,11 +163,11 @@ public class AuthService {
         return "Patient deleted successfully!";
     }
 
-    // ✅ Utility: Map DTO to Entity
+
     private void mapDtoToEntity(PatientDto dto, Patient patient) {
         patient.setUsername(dto.getUsername());
         patient.setEmail(dto.getEmail());
-        patient.setRoles(dto.getRole());
+        patient.setRoles(dto.getRoles());
         patient.setFullName(dto.getFullName());
         patient.setGender(dto.getGender());
         patient.setAge(dto.getAge());
