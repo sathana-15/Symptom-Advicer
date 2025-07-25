@@ -1,5 +1,6 @@
 package com.example.Symptom_Advicer.controller;
 
+import com.example.Symptom_Advicer.model.AdviceResponse;
 import com.example.Symptom_Advicer.model.Symptom;
 import com.example.Symptom_Advicer.service.SymptomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,8 @@ public class SymptomController {
     private SymptomService symptomService;
 
     @PostMapping("/submit")
-    public Symptom submitSymptom(@RequestBody Symptom symptom) {
-        return symptomService.submitSymptom(symptom);
+    public AdviceResponse submitSymptom(@RequestBody Symptom symptom) {
+        return symptomService.submitSymptomAndGetAdvice(symptom);
     }
 
     @GetMapping("/patient/{patientId}")

@@ -3,7 +3,7 @@ package com.example.Symptom_Advicer.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("advice") // table name in DB
+@Table("advice")
 public class Advice {
 
     @Id
