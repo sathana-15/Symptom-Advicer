@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -27,4 +28,11 @@ public class AdviceController {
         return advice.map(Advice::getAdviceText)
                 .orElse("No advice found for: " + keyword);
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    @GetMapping
+    public List<Advice> getAllAdvice() {
+        return adviceService.getAllAdvice();
+    }
+
 }

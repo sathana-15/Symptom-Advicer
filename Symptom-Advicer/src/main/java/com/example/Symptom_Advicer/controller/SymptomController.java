@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/symptoms")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
 public class SymptomController {
 
     @Autowired
@@ -17,6 +18,7 @@ public class SymptomController {
 
     @PostMapping("/submit")
     public AdviceResponse submitSymptom(@RequestBody Symptom symptom) {
+        System.out.println("Received Symptom: " + symptom.getDescription() + ", Patient ID: " + symptom.getPatientId());
         return symptomService.submitSymptomAndGetAdvice(symptom);
     }
 

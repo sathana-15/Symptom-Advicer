@@ -39,7 +39,7 @@ public class PatientController {
         return patientService.getPatientByEmail(email);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/patients")
     public String addPatient(@RequestBody PatientDto patientDto) {
         return patientService.addPatient(patientDto);

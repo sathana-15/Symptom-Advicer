@@ -94,7 +94,8 @@ public class AuthService {
                 token,
                 patient.getUsername(),
                 patient.getEmail(),
-                patient.getRoles()
+                patient.getRoles(),
+                patient.getId()
         );
     }
 

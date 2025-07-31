@@ -13,13 +13,15 @@ public class JwtResponse {
     private String username;
     private String email;
     private String role;
+    private Long patientId;
 
 
-    public JwtResponse(String token, String username, String email, String role) {
+    public JwtResponse(String token, String username, String email, String role, Long patientId) {
         this.token = token;
         this.username = username;
         this.email = email;
         this.role = role;
+        this.patientId = patientId;
     }
 
     public String getToken() {
@@ -52,5 +54,13 @@ public class JwtResponse {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Long getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Long patientId) {
+        this.patientId = patientId;
     }
 }

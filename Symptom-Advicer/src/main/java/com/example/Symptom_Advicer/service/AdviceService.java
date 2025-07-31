@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,4 +27,9 @@ public class AdviceService {
     public Optional<Advice> getAdviceByKeyword(String keyword) {
         return adviceRepository.findBySymptomKeywordIgnoreCase(keyword);
     }
+
+    public List<Advice> getAllAdvice() {
+        return adviceRepository.findAll();
+    }
+
 }
