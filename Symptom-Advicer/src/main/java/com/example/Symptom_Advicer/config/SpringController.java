@@ -87,7 +87,7 @@ public class SpringController {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("http://localhost:3000", "http://localhost:5173","https://symptom-advicer-2.onrender.com"));
+        config.setAllowedOriginPatterns(List.of("http://localhost:3000", "http://localhost:5173","https://symptom-advicer-frontend.vercel.app/"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
