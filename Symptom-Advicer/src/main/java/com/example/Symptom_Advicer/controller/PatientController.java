@@ -15,25 +15,25 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_DOCTOR','ROLE_PATIENT')")
     @GetMapping("/")
     public String welcome() {
         return "Welcome to Symptom Advicer!";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_DOCTOR','ROLE_PATIENT')")
     @GetMapping("/patients")
     public List<Patient> getAllPatients() {
         return patientService.getAllPatients();
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_DOCTOR','ROLE_PATIENT')")
     @GetMapping("/patients/{id}")
     public Patient getPatientById(@PathVariable Long id) {
         return patientService.getPatientById(id);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PATIENT',ROLE_DOCTOR')")
     @GetMapping("/patients/email/{email}")
     public Patient getPatientByEmail(@PathVariable String email) {
         return patientService.getPatientByEmail(email);

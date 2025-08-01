@@ -16,7 +16,7 @@ public class AdviceController {
     @Autowired
     private AdviceService adviceService;
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_DOCTOR')")
     @PostMapping
     public Advice addAdvice(@RequestBody Advice advice) {
         return adviceService.addAdvice(advice);
@@ -29,7 +29,7 @@ public class AdviceController {
                 .orElse("No advice found for: " + keyword);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_DOCTOR')")
     @GetMapping
     public List<Advice> getAllAdvice() {
         return adviceService.getAllAdvice();

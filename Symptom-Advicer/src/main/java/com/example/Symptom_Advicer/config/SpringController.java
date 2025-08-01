@@ -66,11 +66,11 @@ public class SpringController {
                     auth.requestMatchers("/api/auth/**").permitAll();
                     auth.requestMatchers("/error").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/patient/patients").permitAll();
-                    auth.requestMatchers(HttpMethod.GET, "/patient/**").hasAnyRole("USER", "ADMIN");
-                    auth.requestMatchers(HttpMethod.GET, "/symptom/**").hasAnyRole("USER", "ADMIN");
-                    auth.requestMatchers(HttpMethod.POST, "/advice/**").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.GET, "/api/advice").hasAnyRole("ADMIN","USER","DOCTOR");
-                    auth.requestMatchers(HttpMethod.POST, "/api/symptoms/**").hasAnyRole("PATIENT", "DOCTOR", "USER", "ADMIN");
+                    auth.requestMatchers(HttpMethod.GET, "/patient/**").hasAnyRole("DOCTOR", "ADMIN","PATIENT");
+                    auth.requestMatchers(HttpMethod.GET, "/symptom/**").hasAnyRole("DOCTOR", "ADMIN");
+                    auth.requestMatchers(HttpMethod.POST, "/advice/**").hasAnyRole("ADMIN","DOCTOR");
+                    auth.requestMatchers(HttpMethod.GET, "/api/advice").hasAnyRole("ADMIN","DOCTOR");
+                    auth.requestMatchers(HttpMethod.POST, "/api/symptoms/submit").hasAnyRole("PATIENT", "ADMIN");
 
                     auth.anyRequest().authenticated();
                 })
