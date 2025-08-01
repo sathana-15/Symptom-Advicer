@@ -2,7 +2,7 @@ package com.example.Symptom_Advicer.model;
 
 
 import lombok.Data;
-import org.springframework.data.relational.core.mapping.Table;
+
 
 
 @Data
