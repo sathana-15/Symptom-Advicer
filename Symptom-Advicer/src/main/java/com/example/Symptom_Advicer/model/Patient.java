@@ -23,6 +23,7 @@ import jakarta.persistence.GenerationType;
 public class Patient {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String email;

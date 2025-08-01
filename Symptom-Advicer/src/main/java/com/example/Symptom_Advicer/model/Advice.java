@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 public class Advice {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String symptomKeyword;
