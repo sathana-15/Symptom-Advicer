@@ -1,7 +1,7 @@
 package com.example.Symptom_Advicer.config;
 
-import com.example.Symptom_Advicer.jwt.JwtAuthenticationFilter;
-import com.example.Symptom_Advicer.service.CustomerUserDetailsService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
+import com.example.Symptom_Advicer.jwt.JwtAuthenticationFilter;
+import com.example.Symptom_Advicer.service.CustomerUserDetailsService;
 
 @Configuration
 @EnableMethodSecurity
@@ -87,7 +88,7 @@ public class SpringController {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("http://localhost:3000", "http://localhost:5173","https://symptom-advicer-frontend-2bxf.vercel.app"));
+        config.setAllowedOriginPatterns(List.of("http://localhost:3000", "http://localhost:5173","https://symptom-advicer-frontend-sv6e.vercel.app/"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
